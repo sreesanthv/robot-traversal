@@ -27,13 +27,32 @@ func NewRobot(startingPostion, plane *Postion, direction string) *Robot {
 }
 
 func (r *Robot) ProcessCommand(cmd string) {
+
+	getDirection := func(dir string, turnClockWise bool) string {
+		dirIndex := directionIndices[dir]
+		if turnClockWise {
+			if dirIndex == 3 {
+				dirIndex = 0
+			} else {
+				dirIndex++
+			}
+		} else {
+			if dirIndex == 0 {
+				dirIndex = 3
+			} else {
+				dirIndex--
+			}
+		}
+		return direction[dirIndex]
+	}
+
 	for _, c := range cmd {
 		x, y := r.X, r.Y
 		switch string(c) {
 		case "L":
-			r.Direction = direction[directionIndices[r.Direction]-1]
+			r.Direction = getDirection(r.Direction, false)
 		case "R":
-			r.Direction = direction[directionIndices[r.Direction]+1]
+			r.Direction = getDirection(r.Direction, true)
 		case "M":
 			switch r.Direction {
 			case "W":
